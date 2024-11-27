@@ -1,3 +1,9 @@
+/*
+my role = data analyst -> where job_name = "data analyst"
+in demand skills -> Count (data analyst role ) group by skills 
+
+*/
+
 WITH top_salary_comp AS (
 SELECT
     job_id,
@@ -6,7 +12,8 @@ SELECT
     job_location,
     job_schedule_type,
     salary_year_avg,
-    job_posted_date
+    job_posted_date,
+    job_title_short
 FROM   
     job_postings_fact
 
@@ -17,11 +24,8 @@ WHERE
 )
 
 SELECT
-    tsc.job_title,
-    tsc.company_name,
     sd.skills AS skills,
-    tsc.salary_year_avg,
-    tsc.job_id
+    COUNT(tsc.job_title_short) AS count_da
 
 FROM top_salary_comp AS tsc
 
@@ -29,13 +33,12 @@ LEFT JOIN skills_job_dim AS sjd ON sjd.job_id = tsc.job_id
 LEFT JOIN skills_dim AS sd ON sd.skill_id = sjd.skill_id
 WHERE
     sd.skills IS NOT NULL 
---- ESTE WHERE ANULA LA COMPANIA CON MAYOR SALARIO YA QUE NO CONTIENE UN SKILL ID 
+
+GROUP BY
+    skills 
 ORDER BY
-    salary_year_avg DESC
+    count_da DESC
 LIMIT 10;
 
 
---- FOR TESTING --- 
-SELECT * FROM skills_dim LIMIT 20
-SELECT * FROM job_postings_fact LIMIT 20
-SELECT * FROM skills_job_dim LIMIT 20
+-- This query shows the top 10 skills demanded for Data Analist role, and the result show us that the most demanded skills are SQL, Excel and Python

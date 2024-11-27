@@ -1,10 +1,10 @@
 SELECT
-    job_id,
     name AS company_name,
+    salary_year_avg,
     job_title,
+    job_id,
     job_location,
     job_schedule_type,
-    salary_year_avg,
     job_posted_date
 FROM   
     job_postings_fact
@@ -15,3 +15,6 @@ WHERE
 ORDER BY
     salary_year_avg DESC
 LIMIT 10
+
+
+-- This query show us the top 10 company salaries and the position for Data Analytics
